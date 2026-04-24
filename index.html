@@ -1,194 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smooth Cinema Player</title>
-    <style>
-        /* Smooth scrolling for the whole page */
-        html { scroll-behavior: smooth; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cool Cinema</title>
+<style>
+html{scroll-behavior:smooth;}
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #050505;
-            color: #ffffff;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            min-height: 150vh; /* Extra height for scrolling */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+body{
+margin:0;
+padding:0;
+background-color:#050505;
+color:#ffffff;
+font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+min-height:150vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+}
 
-        /* Animated Background */
-        .bg-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #0f0f0f 0%, #000 100%);
-            z-index: -1;
-        }
+.bg-glow{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:radial-gradient(circle at center,#0f0f0f 0%,#000 100%);
+z-index:-1;
+}
 
-        /* Hero Section */
-        .hero {
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            width: 100%;
-        }
+.hero{
+height:80vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+width:100%;
+}
 
-        h1 {
-            font-size: 3rem;
-            font-weight: 100;
-            letter-spacing: 12px;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            background: linear-gradient(to bottom, #fff, #444);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+h1{
+font-size:3rem;
+font-weight:100;
+letter-spacing:12px;
+margin-bottom:40px;
+text-transform:uppercase;
+background:linear-gradient(to bottom,#fff,#444);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-        .input-group {
-            display: flex;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px;
-            border-radius: 100px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-        }
+.input-group{
+display:flex;
+gap:15px;
+background:rgba(255,255,255,.05);
+padding:10px;
+border-radius:100px;
+border:1px solid rgba(255,255,255,.1);
+backdrop-filter:blur(10px);
+transition:.3s;
+}
 
-        .input-group:focus-within {
-            border-color: #ff0000;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.15);
-        }
+.input-group:focus-within{
+border-color:#ff0000;
+box-shadow:0 0 30px rgba(255,0,0,.15);
+}
 
-        input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: white;
-            padding: 10px 25px;
-            width: 350px;
-            font-size: 16px;
-        }
+input{
+background:transparent;
+border:none;
+outline:none;
+color:white;
+padding:10px 25px;
+width:350px;
+font-size:16px;
+}
 
-        button {
-            background: #ff0000;
-            color: white;
-            border: none;
-            padding: 12px 35px;
-            border-radius: 100px;
-            cursor: pointer;
-            font-weight: 700;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
+button{
+background:#ff0000;
+color:white;
+border:none;
+padding:12px 35px;
+border-radius:100px;
+cursor:pointer;
+font-weight:700;
+text-transform:uppercase;
+transition:.3s;
+}
 
-        button:hover {
-            background: #b30000;
-            transform: scale(1.05);
-        }
+button:hover{
+background:#b30000;
+transform:scale(1.05);
+}
 
-        /* Video Area */
-        .video-container {
-            width: 90%;
-            max-width: 1100px;
-            margin-bottom: 100px;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-        }
+/* FIXED SMALL GOOGLE AI MODE STYLE BUTTON */
+.week-btn{
+position:relative;
+margin-top:30px;
+margin-bottom:18px;
+width:150px;
+height:42px;
+padding:0 18px;
+border-radius:999px;
+background:#080808;
+color:#fff;
+border:none;
+font-size:13px;
+font-weight:700;
+cursor:pointer;
+z-index:2;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+white-space:nowrap;
+}
 
-        .video-container.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+.week-btn::before{
+content:"";
+position:absolute;
+inset:-2px;
+border-radius:999px;
+background:conic-gradient(red,orange,yellow,lime,cyan,blue,violet,red);
+animation:spin 4s linear infinite;
+z-index:-2;
+}
 
-        .video-box {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            background: #000;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
+.week-btn::after{
+content:"";
+position:absolute;
+inset:2px;
+border-radius:999px;
+background:#050505;
+z-index:-1;
+}
 
-        iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+.week-btn:hover::before{
+animation:spin 1s linear infinite;
+}
 
-        .scroll-hint {
-            margin-top: 50px;
-            font-size: 12px;
-            color: #555;
-            letter-spacing: 2px;
-            animation: pulse 2s infinite;
-        }
+@keyframes spin{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-    </style>
+.video-container{
+width:90%;
+max-width:1100px;
+margin-bottom:100px;
+opacity:0;
+transform:translateY(50px);
+transition:all 1s cubic-bezier(.19,1,.22,1);
+}
+
+.video-container.active{
+opacity:1;
+transform:translateY(0);
+}
+
+.video-box{
+position:relative;
+padding-bottom:56.25%;
+height:0;
+background:#000;
+border-radius:24px;
+overflow:hidden;
+box-shadow:0 50px 100px rgba(0,0,0,.8);
+border:1px solid rgba(255,255,255,.05);
+}
+
+iframe{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+border:none;
+}
+
+.scroll-hint{
+margin-top:50px;
+font-size:12px;
+color:#555;
+letter-spacing:2px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%,100%{opacity:.3;}
+50%{opacity:1;}
+}
+
+.week-page{
+display:none;
+width:100%;
+min-height:100vh;
+padding:30px;
+box-sizing:border-box;
+}
+
+.back-btn{
+position:fixed;
+top:20px;
+left:20px;
+background:#111;
+border:1px solid #333;
+z-index:50;
+}
+
+.week-grid{
+margin-top:70px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:25px;
+}
+
+.mini-video{
+position:relative;
+padding-bottom:56.25%;
+height:0;
+border-radius:18px;
+overflow:hidden;
+background:#000;
+}
+
+.mini-video iframe{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+}
+</style>
 </head>
 <body>
 
-    <div class="bg-glow"></div>
+<div class="bg-glow"></div>
 
-    <section class="hero">
-        <h1>Cinema</h1>
-        <div class="input-group">
-            <input type="text" id="videoSource" placeholder="Paste Video ID or URL..." onkeydown="if(event.key === 'Enter') playVideo()">
-            <button onclick="playVideo()">Launch</button>
-        </div>
-        <div class="scroll-hint">SCROLL DOWN FOR PLAYER</div>
-    </section>
+<section class="hero" id="mainPage">
+<h1>Cinema</h1>
 
-    <div id="videoArea" class="video-container">
-        <div class="video-box">
-            <iframe id="mainPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-    </div>
+<div class="input-group">
+<input type="text" id="videoSource" placeholder="Paste Video ID or URL..." onkeydown="if(event.key==='Enter') playVideo()">
+<button onclick="playVideo()">Launch</button>
+</div>
 
-    <script>
-        function playVideo() {
-            const input = document.getElementById('videoSource').value.trim();
-            const player = document.getElementById('mainPlayer');
-            const container = document.getElementById('videoArea');
+<button class="week-btn" onclick="openWeek()">Videos of the Week</button>
 
-            if (input) {
-                let videoId = input;
+<div class="scroll-hint">SCROLL DOWN FOR PLAYER</div>
+</section>
 
-                if (input.includes('v=')) {
-                    videoId = input.split('v=')[1].split('&')[0];
-                } else if (input.includes('youtu.be/')) {
-                    videoId = input.split('youtu.be/')[1].split('?')[0];
-                }
+<div id="videoArea" class="video-container">
+<div class="video-box">
+<iframe id="mainPlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+</div>
+</div>
 
-                player.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+<div class="week-page" id="weekPage">
+<button class="back-btn" onclick="closeWeek()">← Back</button>
 
-                container.classList.add('active');
+<div class="week-grid">
+<div class="mini-video"><iframe src="https://www.youtube.com/embed/zCVdOKMCLv8"></iframe></div>
+<div class="mini-video"><iframe src="https://www.youtube.com/embed/HJblmMb6T6w"></iframe></div>
+<div class="mini-video"><iframe src="https://www.youtube.com/embed/skCc0eJR-WY"></iframe></div>
+<div class="mini-video"><iframe src="https://www.youtube.com/embed/jhqp6Ll3H98"></iframe></div>
+<div class="mini-video"><iframe src="https://www.youtube.com/embed/FEwyIvJQ6ds"></iframe></div>
+<div class="mini-video"><iframe src="https://www.youtube.com/embed/zRtGL0-5rg4"></iframe></div>
+</div>
+</div>
 
-                setTimeout(() => {
-                    container.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-            }
-        }
-    </script>
+<script>
+function playVideo(){
+const input=document.getElementById('videoSource').value.trim();
+const player=document.getElementById('mainPlayer');
+const container=document.getElementById('videoArea');
+
+if(input){
+let videoId=input;
+
+if(input.includes('v=')){
+videoId=input.split('v=')[1].split('&')[0];
+}else if(input.includes('youtu.be/')){
+videoId=input.split('youtu.be/')[1].split('?')[0];
+}
+
+player.src=`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+container.classList.add('active');
+
+setTimeout(()=>{
+container.scrollIntoView({behavior:'smooth'});
+},100);
+}
+}
+
+function openWeek(){
+document.getElementById("mainPage").style.display="none";
+document.getElementById("videoArea").style.display="none";
+document.getElementById("weekPage").style.display="block";
+window.scrollTo(0,0);
+}
+
+function closeWeek(){
+document.getElementById("weekPage").style.display="none";
+document.getElementById("mainPage").style.display="flex";
+document.getElementById("videoArea").style.display="block";
+}
+</script>
 
 </body>
 </html>
